@@ -1,0 +1,436 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Kleanthis E Karavangelas, Basem Saleh</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-02-09"><meta name="DC.source" content="Assignment2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Kleanthis E Karavangelas, Basem Saleh</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part 1</a></li><li><a href="#12">Part 2</a></li><li><a href="#15">Encode function</a></li><li><a href="#16">decode function</a></li></ul></div><h2 id="1">Part 1</h2><p>original images</p><pre class="codeinput">peps = imread(<span class="string">'peppers.tif'</span>);
+peps_size = dir(<span class="string">'peppers.tif'</span>).bytes;
+bab = imread(<span class="string">'baboon.tif'</span>);
+bab_size = dir(<span class="string">'baboon.tif'</span>).bytes;
+</pre><p>Quality factor 90</p><pre class="codeinput">figure(1)
+
+imwrite(peps, <span class="string">'peppers90.jpg'</span>,<span class="string">'Quality'</span>, 90);
+peps90_size = dir(<span class="string">'peppers90.jpg'</span>).bytes;
+psnr_peps = psnr(imread(<span class="string">'peppers90.jpg'</span>), peps);
+
+imwrite(bab, <span class="string">'baboon90.jpg'</span>,<span class="string">'Quality'</span>, 90);
+bab90_size = dir(<span class="string">'baboon90.jpg'</span>).bytes;
+psnr_bab = psnr(imread(<span class="string">'baboon90.jpg'</span>), bab);
+
+sgtitle(<span class="string">'Quality factor = 90'</span>);
+subplot(2,2,1), imshow(peps), xlabel(<span class="string">'Original peppers.tif'</span>);
+subplot(2,2,2), imshow(<span class="string">'peppers90.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel(<span class="string">'Original baboon.tif'</span>);
+subplot(2,2,4), imshow(<span class="string">'baboon90.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_bab));
+</pre><img vspace="5" hspace="5" src="Assignment2_01.png" alt=""> <p>The original peppers.tif image has a size of 259376 bytes, while the QF = 90 image has a size of 48956. The original baboon.tif image has a size of 264750, and the QF = 90 image has a size of 105820 bytes.</p><p>Quality factor 10</p><pre class="codeinput">figure(2)
+
+imwrite(peps, <span class="string">'peppers10.jpg'</span>,<span class="string">'Quality'</span>, 10);
+peps10_size = dir(<span class="string">'peppers10.jpg'</span>).bytes;
+psnr_peps = psnr(imread(<span class="string">'peppers10.jpg'</span>), peps);
+
+imwrite(bab, <span class="string">'baboon10.jpg'</span>,<span class="string">'Quality'</span>, 10);
+bab10_size = dir(<span class="string">'baboon10.jpg'</span>).bytes;
+psnr_bab = psnr(imread(<span class="string">'baboon10.jpg'</span>), bab);
+
+sgtitle(<span class="string">'Quality factor = 10'</span>);
+subplot(2,2,1), imshow(peps), xlabel(<span class="string">'Original peppers.tif'</span>);
+subplot(2,2,2), imshow(<span class="string">'peppers10.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel(<span class="string">'Original baboon.tif'</span>);
+subplot(2,2,4), imshow(<span class="string">'baboon10.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_bab));
+</pre><img vspace="5" hspace="5" src="Assignment2_02.png" alt=""> <p>The original peppers.tif image has a size of 259376 bytes, while the QF = 10 image has a size of 8221. The original baboon.tif image has a size of 264750, and the QF = 10 image has a size of 13258 bytes.</p><p>Quality factor 70</p><pre class="codeinput">figure(3)
+
+imwrite(peps, <span class="string">'peppers70.jpg'</span>,<span class="string">'Quality'</span>, 70);
+peps70_size = dir(<span class="string">'peppers70.jpg'</span>).bytes;
+psnr_peps = psnr(imread(<span class="string">'peppers70.jpg'</span>), peps);
+
+imwrite(bab, <span class="string">'baboon70.jpg'</span>,<span class="string">'Quality'</span>, 70);
+bab70_size = dir(<span class="string">'baboon70.jpg'</span>).bytes;
+psnr_bab = psnr(imread(<span class="string">'baboon70.jpg'</span>), bab);
+
+sgtitle(<span class="string">'Quality factor = 70'</span>);
+subplot(2,2,1), imshow(peps), xlabel(<span class="string">'Original peppers.tif'</span>);
+subplot(2,2,2), imshow(<span class="string">'peppers70.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel(<span class="string">'Original baboon.tif'</span>);
+subplot(2,2,4), imshow(<span class="string">'baboon70.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_bab));
+</pre><img vspace="5" hspace="5" src="Assignment2_03.png" alt=""> <p>The original peppers.tif image has a size of 259376 bytes, while the QF = 70 image has a size of 33276. The original baboon.tif image has a size of 264750, and the QF = 70 image has a size of 57172 bytes.</p><p>Quality factor 50</p><pre class="codeinput">figure(4)
+
+imwrite(peps, <span class="string">'peppers50.jpg'</span>,<span class="string">'Quality'</span>, 50);
+peps50_size = dir(<span class="string">'peppers50.jpg'</span>).bytes;
+psnr_peps = psnr(imread(<span class="string">'peppers50.jpg'</span>), peps);
+
+imwrite(bab, <span class="string">'baboon50.jpg'</span>,<span class="string">'Quality'</span>, 50);
+bab50_size = dir(<span class="string">'baboon50.jpg'</span>).bytes;
+psnr_bab = psnr(imread(<span class="string">'baboon50.jpg'</span>), bab);
+
+sgtitle(<span class="string">'Quality factor = 50'</span>);
+subplot(2,2,1), imshow(peps), xlabel(<span class="string">'Original peppers.tif'</span>);
+subplot(2,2,2), imshow(<span class="string">'peppers50.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel(<span class="string">'Original baboon.tif'</span>);
+subplot(2,2,4), imshow(<span class="string">'baboon50.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_bab));
+</pre><img vspace="5" hspace="5" src="Assignment2_04.png" alt=""> <p>The original peppers.tif image has a size of 259376 bytes, while the QF = 50 image has a size of 27405. The original baboon.tif image has a size of 264750, and the QF = 50 image has a size of 41548 bytes.</p><p>Quality factor 30</p><pre class="codeinput">figure(5)
+
+imwrite(peps, <span class="string">'peppers30.jpg'</span>,<span class="string">'Quality'</span>, 30);
+peps30_size = dir(<span class="string">'peppers30.jpg'</span>).bytes;
+psnr_peps = psnr(imread(<span class="string">'peppers30.jpg'</span>), peps);
+
+imwrite(bab, <span class="string">'baboon30.jpg'</span>,<span class="string">'Quality'</span>, 30);
+bab30_size = dir(<span class="string">'baboon30.jpg'</span>).bytes;
+psnr_bab = psnr(imread(<span class="string">'baboon30.jpg'</span>), bab);
+
+sgtitle(<span class="string">'Quality factor = 30'</span>);
+subplot(2,2,1), imshow(peps), xlabel(<span class="string">'Original peppers.tif'</span>);
+subplot(2,2,2), imshow(<span class="string">'peppers30.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel(<span class="string">'Original baboon.tif'</span>);
+subplot(2,2,4), imshow(<span class="string">'baboon30.jpg'</span>), xlabel(sprintf(<span class="string">'PSNR = %f'</span>, psnr_bab));
+</pre><img vspace="5" hspace="5" src="Assignment2_05.png" alt=""> <p>The original peppers.tif image has a size of 259376 bytes, while the QF = 30 image has a size of 15902. The original baboon.tif image has a size of 264750, and the QF = 30 image has a size of 29624 bytes.</p><h2 id="12">Part 2</h2><p>Encode</p><pre class="codeinput">enfile = encode(<span class="string">"peppers.tif"</span>)
+</pre><p>Decode</p><pre class="codeinput">origZ = decode();
+</pre><h2 id="15">Encode function</h2><pre class="codeinput"><span class="keyword">function</span> enfile = encode(image)
+    <span class="comment">% read the input image</span>
+    I = imread(image);
+
+    <span class="comment">% convert to double type</span>
+    I = im2double(I);
+
+    <span class="comment">% compute the dct on 8x8 blocks</span>
+    dctt = @(blkstruct) dct(blkstruct.data);
+    D = blockproc(I, [8 8], dctt);
+
+    Qmat = [16 11 10 16 24 40 51 61;
+    12 12 14 19 26 58 60 55;
+    14 13 16 24 40 57 69 56;
+    14 17 22 29 51 87 80 62;
+    18 22 37 56 68 109 103 77;
+    24 35 55 64 81 104 113 92;
+    49 64 78 87 103 121 120 101;
+    72 92 95 98 112 100 103 99];
+
+<span class="comment">%     Qmat = [ 17	18	24	47	99	99	99	99;</span>
+<span class="comment">%     18	21	26	66	99	99	99	99;</span>
+<span class="comment">%     24	26	56	99	99	99	99	99;</span>
+<span class="comment">%     47	66	99	99	99	99	99	99;</span>
+<span class="comment">%     99	99	99	99	99	99	99	99;</span>
+<span class="comment">%     99	99	99	99	99	99	99	99;</span>
+<span class="comment">%     99	99	99	99	99	99	99	99;</span>
+<span class="comment">%     99	99	99	99	99	99	99	99;];</span>
+
+    <span class="comment">% quantize the dct coefficients using the above table</span>
+
+    quant = @(blkstruct) (blkstruct.data) ./ Qmat;
+    Q = blockproc(D, [8 8], quant);
+    Q = ceil(Q);
+
+    <span class="comment">% convert matrix to vector</span>
+
+    ZigZag = @(blkstruct) ZigzagMtx2Vector(blkstruct.data);
+    Z = blockproc(Q, [8 8], ZigZag);
+    [rowN, colN] = size(Z);
+    Z = Z';
+
+    <span class="comment">% entropy encoding</span>
+    enfile = JPEG_entropy_encode(rowN, colN, 8, Qmat, Z, <span class="string">''</span>, 0);
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+enfile =
+
+       51928
+
+</pre><h2 id="16">decode function</h2><pre class="codeinput"><span class="keyword">function</span> origZ = decode()
+
+    <span class="comment">% entropy decoding</span>
+    [irowN, icolN, idtc_block_size, iQmat, iZ] = JPEG_entropy_decode(<span class="string">''</span>);
+    iZ = iZ';
+
+    <span class="comment">% reconstructing the matrix from the vector</span>
+    Vect = @(blkstruct) Vector2ZigzagMtx(blkstruct.data);
+    Z = blockproc(iZ, [1 64], Vect);
+
+
+    <span class="comment">% dequantizing the matrix</span>
+    dequant = @(blkstruct) (iQmat .* blkstruct.data);
+    DCT = blockproc(Z, [8 8], dequant);
+
+
+    <span class="comment">% performing inverse dct on matrix to retrieve image</span>
+    indct = @(blkstruct) idct(blkstruct.data);
+    origZ = blockproc(DCT, [8 8], indct);
+
+    origZ = uint8(origZ);
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Kleanthis E Karavangelas, Basem Saleh
+%% Part 1
+% original images
+peps = imread('peppers.tif');
+peps_size = dir('peppers.tif').bytes;
+bab = imread('baboon.tif');
+bab_size = dir('baboon.tif').bytes;
+
+%% 
+% Quality factor 90
+figure(1)
+
+imwrite(peps, 'peppers90.jpg','Quality', 90);
+peps90_size = dir('peppers90.jpg').bytes;
+psnr_peps = psnr(imread('peppers90.jpg'), peps);
+
+imwrite(bab, 'baboon90.jpg','Quality', 90);
+bab90_size = dir('baboon90.jpg').bytes;
+psnr_bab = psnr(imread('baboon90.jpg'), bab);
+
+sgtitle('Quality factor = 90');
+subplot(2,2,1), imshow(peps), xlabel('Original peppers.tif');
+subplot(2,2,2), imshow('peppers90.jpg'), xlabel(sprintf('PSNR = %f', psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel('Original baboon.tif');
+subplot(2,2,4), imshow('baboon90.jpg'), xlabel(sprintf('PSNR = %f', psnr_bab));
+
+%%
+% The original peppers.tif image has a size of 259376 bytes, while the QF =
+% 90 image has a size of 48956. The original baboon.tif image has a size of
+% 264750, and the QF = 90 image has a size of 105820 bytes.
+
+%% 
+% Quality factor 10
+figure(2)
+
+imwrite(peps, 'peppers10.jpg','Quality', 10);
+peps10_size = dir('peppers10.jpg').bytes;
+psnr_peps = psnr(imread('peppers10.jpg'), peps);
+
+imwrite(bab, 'baboon10.jpg','Quality', 10);
+bab10_size = dir('baboon10.jpg').bytes;
+psnr_bab = psnr(imread('baboon10.jpg'), bab);
+
+sgtitle('Quality factor = 10');
+subplot(2,2,1), imshow(peps), xlabel('Original peppers.tif');
+subplot(2,2,2), imshow('peppers10.jpg'), xlabel(sprintf('PSNR = %f', psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel('Original baboon.tif');
+subplot(2,2,4), imshow('baboon10.jpg'), xlabel(sprintf('PSNR = %f', psnr_bab));
+
+%%
+% The original peppers.tif image has a size of 259376 bytes, while the QF =
+% 10 image has a size of 8221. The original baboon.tif image has a size of
+% 264750, and the QF = 10 image has a size of 13258 bytes.
+
+%% 
+% Quality factor 70
+
+figure(3)
+
+imwrite(peps, 'peppers70.jpg','Quality', 70);
+peps70_size = dir('peppers70.jpg').bytes;
+psnr_peps = psnr(imread('peppers70.jpg'), peps);
+
+imwrite(bab, 'baboon70.jpg','Quality', 70);
+bab70_size = dir('baboon70.jpg').bytes;
+psnr_bab = psnr(imread('baboon70.jpg'), bab);
+
+sgtitle('Quality factor = 70');
+subplot(2,2,1), imshow(peps), xlabel('Original peppers.tif');
+subplot(2,2,2), imshow('peppers70.jpg'), xlabel(sprintf('PSNR = %f', psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel('Original baboon.tif');
+subplot(2,2,4), imshow('baboon70.jpg'), xlabel(sprintf('PSNR = %f', psnr_bab));
+
+%%
+% The original peppers.tif image has a size of 259376 bytes, while the QF =
+% 70 image has a size of 33276. The original baboon.tif image has a size of
+% 264750, and the QF = 70 image has a size of 57172 bytes.
+
+%%
+% Quality factor 50
+
+figure(4)
+
+imwrite(peps, 'peppers50.jpg','Quality', 50);
+peps50_size = dir('peppers50.jpg').bytes;
+psnr_peps = psnr(imread('peppers50.jpg'), peps);
+
+imwrite(bab, 'baboon50.jpg','Quality', 50);
+bab50_size = dir('baboon50.jpg').bytes;
+psnr_bab = psnr(imread('baboon50.jpg'), bab);
+
+sgtitle('Quality factor = 50');
+subplot(2,2,1), imshow(peps), xlabel('Original peppers.tif');
+subplot(2,2,2), imshow('peppers50.jpg'), xlabel(sprintf('PSNR = %f', psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel('Original baboon.tif');
+subplot(2,2,4), imshow('baboon50.jpg'), xlabel(sprintf('PSNR = %f', psnr_bab));
+
+%%
+% The original peppers.tif image has a size of 259376 bytes, while the QF =
+% 50 image has a size of 27405. The original baboon.tif image has a size of
+% 264750, and the QF = 50 image has a size of 41548 bytes.
+
+%%
+% Quality factor 30
+
+figure(5)
+
+imwrite(peps, 'peppers30.jpg','Quality', 30);
+peps30_size = dir('peppers30.jpg').bytes;
+psnr_peps = psnr(imread('peppers30.jpg'), peps);
+
+imwrite(bab, 'baboon30.jpg','Quality', 30);
+bab30_size = dir('baboon30.jpg').bytes;
+psnr_bab = psnr(imread('baboon30.jpg'), bab);
+
+sgtitle('Quality factor = 30');
+subplot(2,2,1), imshow(peps), xlabel('Original peppers.tif');
+subplot(2,2,2), imshow('peppers30.jpg'), xlabel(sprintf('PSNR = %f', psnr_peps));
+subplot(2,2,3), imshow(bab), xlabel('Original baboon.tif');
+subplot(2,2,4), imshow('baboon30.jpg'), xlabel(sprintf('PSNR = %f', psnr_bab));
+
+%%
+% The original peppers.tif image has a size of 259376 bytes, while the QF =
+% 30 image has a size of 15902. The original baboon.tif image has a size of
+% 264750, and the QF = 30 image has a size of 29624 bytes.
+
+%% Part 2
+
+%%
+% Encode
+enfile = encode("peppers.tif")
+%% 
+% Decode
+origZ = decode();
+
+%% Encode function
+
+function enfile = encode(image)
+    % read the input image
+    I = imread(image);
+    
+    % convert to double type
+    I = im2double(I);
+    
+    % compute the dct on 8x8 blocks
+    dctt = @(blkstruct) dct(blkstruct.data);
+    D = blockproc(I, [8 8], dctt);
+    
+    Qmat = [16 11 10 16 24 40 51 61;
+    12 12 14 19 26 58 60 55;
+    14 13 16 24 40 57 69 56;
+    14 17 22 29 51 87 80 62;
+    18 22 37 56 68 109 103 77;
+    24 35 55 64 81 104 113 92;
+    49 64 78 87 103 121 120 101;
+    72 92 95 98 112 100 103 99];
+
+%     Qmat = [ 17	18	24	47	99	99	99	99;
+%     18	21	26	66	99	99	99	99;
+%     24	26	56	99	99	99	99	99;
+%     47	66	99	99	99	99	99	99;
+%     99	99	99	99	99	99	99	99;
+%     99	99	99	99	99	99	99	99;
+%     99	99	99	99	99	99	99	99;
+%     99	99	99	99	99	99	99	99;];
+
+    % quantize the dct coefficients using the above table
+    
+    quant = @(blkstruct) (blkstruct.data) ./ Qmat;
+    Q = blockproc(D, [8 8], quant);
+    Q = ceil(Q);
+    
+    % convert matrix to vector
+    
+    ZigZag = @(blkstruct) ZigzagMtx2Vector(blkstruct.data);
+    Z = blockproc(Q, [8 8], ZigZag);
+    [rowN, colN] = size(Z);
+    Z = Z';
+    
+    % entropy encoding
+    enfile = JPEG_entropy_encode(rowN, colN, 8, Qmat, Z, '', 0);
+  
+end
+%% decode function
+
+function origZ = decode()
+    
+    % entropy decoding
+    [irowN, icolN, idtc_block_size, iQmat, iZ] = JPEG_entropy_decode('');
+    iZ = iZ';
+    
+    % reconstructing the matrix from the vector
+    Vect = @(blkstruct) Vector2ZigzagMtx(blkstruct.data);
+    Z = blockproc(iZ, [1 64], Vect);
+    
+   
+    % dequantizing the matrix
+    dequant = @(blkstruct) (iQmat .* blkstruct.data);
+    DCT = blockproc(Z, [8 8], dequant);
+   
+
+    % performing inverse dct on matrix to retrieve image
+    indct = @(blkstruct) idct(blkstruct.data);
+    origZ = blockproc(DCT, [8 8], indct);
+
+    origZ = uint8(origZ);
+    
+end
+
+##### SOURCE END #####
+--></body></html>
